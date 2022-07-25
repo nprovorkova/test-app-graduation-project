@@ -10,5 +10,5 @@
 #### Команды:
 docker build . -t nginx
 <br>docker run -d -p 80:80 nginx
-<br>docker tag nginx cr.yandex/crpm4oeaq6p23r9120eb/nginx:1.0.0
-<br>docker push cr.yandex/crpm4oeaq6p23r9120eb/nginx:1.0.0
+<br>docker tag nginx cr.yandex/crprd3vckuutp1esmnn0/nginx:1.0.0
+<br>docker push cr.yandex/crprd3vckuutp1esmnn0/nginx:1.0.0
