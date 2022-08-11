@@ -1,6 +1,7 @@
 
 stages:          
   - build
+  - push
 
 build-docker-image:
   image: docker:git
@@ -8,7 +9,17 @@ build-docker-image:
   services:
     - docker:dind
   script:
-    - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:latest ./
+    - docker push ${CI_REGISTRY_IMAGE}:latest
+
+push-docker-image:
+  image: docker:git
+  stage: push
+  services:
+    - docker:dind
+  script:
+   - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest
     - UPLOAD_TAGS=latest
@@ -21,4 +32,5 @@ build-docker-image:
         docker tag ${CI_REGISTRY_IMAGE}:latest ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
         docker push ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
       done
+
 
