@@ -10,4 +10,15 @@ build-docker-image:
   script:
     - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker pull ${YC_REGISTRY}:latest
+    - docker pull ${CI_REGISTRY_IMAGE}:latest
+    - UPLOAD_TAGS=latest
+      # If we have commit tag, then assign to image additional tags - git tag name and :stable
+    - if [ -n "$CI_COMMIT_TAG" ]; then UPLOAD_TAGS="${UPLOAD_TAGS} ${CI_COMMIT_TAG} stable"; fi
+    - echo "Will upload docker image for tags ${UPLOAD_TAGS}"
+    - |
+      for TAG in ${UPLOAD_TAGS}; do
+        echo "Upload image for tag: $TAG"
+        docker tag ${CI_REGISTRY_IMAGE}:latest ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
+        docker push ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
+      done
+
