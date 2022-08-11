@@ -1,0 +1,13 @@
+
+stages:          
+  - build
+
+build-docker-image:
+  image: docker:git
+  stage: build
+  services:
+    - docker:dind
+  script:
+    - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker pull ${YC_REGISTRY}:latest
