@@ -69,8 +69,9 @@ deploy-docker-image:
     # - cat $HOME/.kube/config
     # - kubectl config get-contexts
     - export KUBECONFIG=~/.kube/config
+    - kubectl version
     # - kubectl config use-context kubernetes-admin@cluster.local
-    - kubectl get pods --all-namespaces -o wide
+    # - kubectl get pods --all-namespaces -o wide
   # needs:
     # - build-docker-image
     # - test-docker-image
