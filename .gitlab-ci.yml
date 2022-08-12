@@ -64,7 +64,7 @@ deploy-docker-image:
   script:
     - kubectl config set-context --current --namespace=applications
     - cd kubernetes/
-    - kubectl kustomize edit set image nginx=${CONTAINER_REGISTRY}/${APP_NAME}:${CI_COMMIT_TAG}
+    - kubectl kustomize edit set image ${CONTAINER_REGISTRY}/${APP_NAME}=*:${CI_COMMIT_TAG}
     - kubectl kustomize build .
     - cat kubernetes/nginx-deployment.yaml 
     # - kubectl delete deploy test-app
