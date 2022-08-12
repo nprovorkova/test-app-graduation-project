@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-app
+  template:
+    metadata:
+      labels:
+        app: test-app
+    spec:
+      containers:
+      - image: cr.yandex/crpbagkai0gjear9v07k/nginx:1.0.0
+        name: test-app
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: n-yandex-cloud
+
