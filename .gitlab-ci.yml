@@ -44,6 +44,7 @@ push-docker-image:
     - UPLOAD_TAGS=latest
       # If we have commit tag, then assign to image additional tags - git tag name and :stable
     - if [ -n "${CI_COMMIT_TAG}" ]; then UPLOAD_TAGS="${CI_COMMIT_TAG}"; fi
+    - echo ${UPLOAD_TAGS}
     - |
       for TAG in ${UPLOAD_TAGS}; do
         echo "Upload image for tag: $TAG"
