@@ -63,8 +63,7 @@ deploy-docker-image:
   services:
     - docker:dind
   script:
-    - kubectl config view
-    - kubectl get pods
+    - kubectl get pods --all-namespaces -o wide
   # needs:
     # - build-docker-image
     # - test-docker-image
