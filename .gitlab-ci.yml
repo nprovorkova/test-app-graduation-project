@@ -66,6 +66,7 @@ deploy-docker-image:
     - mkdir -p $HOME/.kube
     - echo ${KUBECONFIG} > $HOME/.kube/config
     - chown $(id -u):$(id -g) $HOME/.kube/config
+    - kubectl config use-context kubernetes-admin@cluster.local
     - kubectl get pods --all-namespaces -o wide
   # needs:
     # - build-docker-image
