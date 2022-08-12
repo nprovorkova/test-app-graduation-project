@@ -63,6 +63,8 @@ deploy-docker-image:
     - docker:dind
   script:
     - kubectl config set-context --current --namespace=applications
+    - kubectl kustomize kubernetes/
+    - cat kubernetes/nginx-deployment.yaml
     - kubectl delete deploy test-app
     - kubectl apply -f kubernetes/
   rules:
