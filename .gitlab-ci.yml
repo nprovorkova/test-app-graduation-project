@@ -63,12 +63,7 @@ deploy-docker-image:
   services:
     - docker:dind
   script:
-    # - mkdir -p ~/.kube
-    # - echo ${KUBE_CONFIG} > ~/.kube/config
-    # - chown $(id -u):$(id -g) ~/.kube/config
-    - echo $KUBECONFIG
-    # - kubectl config get-contexts
-    # - export KUBECONFIG=$HOME/.kube/config
+    - config set-context --current --namespace=test-app
     - kubectl version
     # - kubectl config use-context kubernetes-admin@cluster.local
     # - kubectl get pods --all-namespaces -o wide
