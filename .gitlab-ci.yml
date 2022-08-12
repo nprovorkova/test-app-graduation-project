@@ -33,7 +33,7 @@ test-docker-image:
     - build-docker-image
 
 push-docker-image:
-  image: bitnami/kubectl:latest
+  image: docker:git
   stage: push
   services:
     - docker:dind
@@ -56,7 +56,7 @@ push-docker-image:
     - test-docker-image
 
 deploy-docker-image:
-  image: docker:git
+  image: bitnami/kubectl:latest
   stage: deploy
   services:
     - docker:dind
