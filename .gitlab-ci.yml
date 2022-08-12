@@ -64,7 +64,7 @@ deploy-docker-image:
     - docker:dind
   script:
     - kubectl config set-context --current --namespace=applications
-    - kubectl get pods --selector=app=test-app
+    - kubectl delete pods --selector=app=test-app
   # needs:
     # - build-docker-image
     # - test-docker-image
