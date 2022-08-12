@@ -68,7 +68,7 @@ deploy-docker-image:
     - chown $(id -u):$(id -g) $HOME/.kube/config
     # - cat $HOME/.kube/config
     # - kubectl config get-contexts
-    - export KUBECONFIG=$HOME/.kube/config
+    # - export KUBECONFIG=$HOME/.kube/config
     - kubectl version
     # - kubectl config use-context kubernetes-admin@cluster.local
     # - kubectl get pods --all-namespaces -o wide
