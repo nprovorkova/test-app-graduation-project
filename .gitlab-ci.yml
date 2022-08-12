@@ -2,9 +2,9 @@ variables:
   APP_NAME: nginx
 
 stages:          
-  - build
-  - test
-  - push
+  # - build
+  # - test
+  # - push
   - deploy
 
 build-docker-image:
@@ -33,7 +33,7 @@ test-docker-image:
     - build-docker-image
 
 push-docker-image:
-  image: docker:git
+  image: bitnami/kubectl:latest
   stage: push
   services:
     - docker:dind
