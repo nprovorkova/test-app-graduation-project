@@ -56,13 +56,15 @@ push-docker-image:
     - test-docker-image
 
 deploy-docker-image:
-  image: bitnami/kubectl:latest
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   stage: deploy
   services:
     - docker:dind
   script:
     - kubectl config set-context --current --namespace=applications
-    - kubectl delete deploy test-app
+    - kubectl rollout restart deploy test-app
     # - kubectl apply -f kubernetes/
   needs:
     - build-docker-image
