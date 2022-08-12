@@ -5,6 +5,7 @@ stages:
   - build
   - test
   - push
+  - deploy
 
 build-docker-image:
   image: docker:git
@@ -53,3 +54,16 @@ push-docker-image:
   needs:
     - build-docker-image
     - test-docker-image
+
+  deploy-docker-image:
+  image: docker:git
+  stage: deploy
+  services:
+    - docker:dind
+  script:
+    - kubectl config use-context ${KUBE_CONFIG}
+    - kubectl get pods
+  needs:
+    - build-docker-image
+    - test-docker-image
+    - push-docker-image
