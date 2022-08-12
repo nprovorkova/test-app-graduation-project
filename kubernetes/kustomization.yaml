@@ -8,20 +8,20 @@ configMapGenerator:
       - .env
 resources:
   - nginx-deployment.yaml
-replacements:
-  - source:
-      # Replace any matches by the value of environment variable `IMAGE_TAG`.
-      kind: ConfigMap
-      name: kustomize-config-map
-      fieldPath: data.CI_COMMIT_TAG
-    targets:
-      - select:
-          # In each Deployment resource …
-          kind: Deployment
-        fieldPaths:
-          # … match the image of container `nginx` …
-          - spec.template.spec.containers.[name=nginx].image
-        options:
-          # … but replace only the second part (image tag) when split by ":".
-          delimiter: ":"
-          index: 1
+#replacements:
+#  - source:
+#      # Replace any matches by the value of environment variable `IMAGE_TAG`.
+#      kind: ConfigMap
+#      name: kustomize-config-map
+#      fieldPath: data.CI_COMMIT_TAG
+#    targets:
+#      - select:
+#          # In each Deployment resource …
+#          kind: Deployment
+#        fieldPaths:
+#          # … match the image of container `nginx` …
+#          - spec.template.spec.containers.[name=nginx].image
+#        options:
+#          # … but replace only the second part (image tag) when split by ":".
+#          delimiter: ":"
+#          index: 1
