@@ -64,13 +64,13 @@ deploy-docker-image:
     - docker:dind
   script:
     - mkdir -p $HOME/.kube
-    - echo ${KUBECONFIG} > $HOME/.kube/config
+    - echo ${KUBE_CONFIG} > $HOME/.kube/config
     - chown $(id -u):$(id -g) $HOME/.kube/config
     # - cat $HOME/.kube/config
     # - kubectl config get-contexts
-    - docker run --rm -v /home/user/.kube/config:/bitnami/kubeconfig bitnami/kubectl --kubeconfig=/bitnami/kubeconfig get pods
+    - export KUBECONFIG=~/.kube/config
     # - kubectl config use-context kubernetes-admin@cluster.local
-    # - kubectl get pods --all-namespaces -o wide
+    - kubectl get pods --all-namespaces -o wide
   # needs:
     # - build-docker-image
     # - test-docker-image
