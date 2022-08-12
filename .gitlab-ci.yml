@@ -63,7 +63,7 @@ deploy-docker-image:
   script:
     - kubectl config set-context --current --namespace=applications
     - kubectl delete deploy test-app
-    - kubectl apply -f kubernetes/
+    # - kubectl apply -f kubernetes/
   needs:
     - build-docker-image
     - test-docker-image
