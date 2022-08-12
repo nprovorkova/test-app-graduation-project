@@ -63,7 +63,7 @@ deploy-docker-image:
   services:
     - docker:dind
   script:
-    - export KUBECONFIG="${KUBE_CONFIG}
+    - export KUBECONFIG="$KUBE_CONFIG
     - kubectl config view
     - kubectl get pods
   # needs:
