@@ -7,53 +7,53 @@ stages:
   # - push
   - deploy
 
-build-docker-image:
-  image: docker:git
-  stage: build
-  services:
-    - docker:dind
-  script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build --pull -t ${CI_REGISTRY_IMAGE}:latest ./
-    - docker push ${CI_REGISTRY_IMAGE}:latest
+# build-docker-image:
+#   image: docker:git
+#   stage: build
+#   services:
+#     - docker:dind
+#   script:
+#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+#     - docker build --pull -t ${CI_REGISTRY_IMAGE}:latest ./
+#     - docker push ${CI_REGISTRY_IMAGE}:latest
 
-test-docker-image:
-  image: docker:git
-  stage: test
-  services:
-    - docker:dind
-  script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker run --name test_build --rm -d -p 18080:80 ${CI_REGISTRY_IMAGE}:latest
-    - sleep 5s
-    - wget -q docker:18080 -O - |grep 'Test application!'
-  after_script:
-    - docker kill test_build
-  needs:
-    - build-docker-image
+# test-docker-image:
+#   image: docker:git
+#   stage: test
+#   services:
+#     - docker:dind
+#   script:
+#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+#     - docker run --name test_build --rm -d -p 18080:80 ${CI_REGISTRY_IMAGE}:latest
+#     - sleep 5s
+#     - wget -q docker:18080 -O - |grep 'Test application!'
+#   after_script:
+#     - docker kill test_build
+#   needs:
+#     - build-docker-image
 
-push-docker-image:
-  image: docker:git
-  stage: push
-  services:
-    - docker:dind
-  script:
-    - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker pull ${CI_REGISTRY_IMAGE}:latest
-    - UPLOAD_TAGS=latest
-      # If we have commit tag, then assign to image additional tags - git tag name and :stable
-    - if [ -n "$CI_COMMIT_TAG" ]; then UPLOAD_TAGS="${UPLOAD_TAGS} ${CI_COMMIT_TAG} stable"; fi
-    - echo "Will upload docker image for tags ${UPLOAD_TAGS}"
-    - |
-      for TAG in ${UPLOAD_TAGS}; do
-        echo "Upload image for tag: $TAG"
-        docker tag ${CI_REGISTRY_IMAGE}:latest ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
-        docker push ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
-      done
-  needs:
-    - build-docker-image
-    - test-docker-image
+# push-docker-image:
+#   image: docker:git
+#   stage: push
+#   services:
+#     - docker:dind
+#   script:
+#     - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
+#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+#     - docker pull ${CI_REGISTRY_IMAGE}:latest
+#     - UPLOAD_TAGS=latest
+#       # If we have commit tag, then assign to image additional tags - git tag name and :stable
+#     - if [ -n "$CI_COMMIT_TAG" ]; then UPLOAD_TAGS="${UPLOAD_TAGS} ${CI_COMMIT_TAG} stable"; fi
+#     - echo "Will upload docker image for tags ${UPLOAD_TAGS}"
+#     - |
+#       for TAG in ${UPLOAD_TAGS}; do
+#         echo "Upload image for tag: $TAG"
+#         docker tag ${CI_REGISTRY_IMAGE}:latest ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
+#         docker push ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
+#       done
+#   needs:
+#     - build-docker-image
+#     - test-docker-image
 
 deploy-docker-image:
   image: bitnami/kubectl:latest
