@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# Generate a ConfigMap based on the environment variables in the file `.env`.
+configMapGenerator:
+  - name: kustomize-config-map
+    envs:
+      - .env
+resources:
+  - nginx-deployment.yaml
+replacements:
+  - source:
+      # Replace any matches by the value of environment variable `IMAGE_TAG`.
+      kind: ConfigMap
+      name: kustomize-config-map
+      fieldPath: data.CI_COMMIT_TAG
+    targets:
+      - select:
+          # In each Deployment resource …
+          kind: Deployment
+        fieldPaths:
+          # … match the image of container `nginx` …
+          - spec.template.spec.containers.[name=nginx].image
+        options:
+          # … but replace only the second part (image tag) when split by ":".
+          delimiter: ":"
+          index: 1
