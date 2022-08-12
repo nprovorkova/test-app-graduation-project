@@ -63,7 +63,7 @@ deploy-docker-image:
   script:
     - kubectl config use-context ${KUBE_CONFIG}
     - kubectl get pods
-  needs:
-    - build-docker-image
-    - test-docker-image
-    - push-docker-image
+  # needs:
+    # - build-docker-image
+    # - test-docker-image
+    # - push-docker-image
