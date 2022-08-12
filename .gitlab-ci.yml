@@ -64,6 +64,7 @@ deploy-docker-image:
     - docker:dind
   script:
     - kubectl config set-context --current --namespace=applications
+    - kubectl get po 
     - kubectl get deploy 
   # needs:
     # - build-docker-image
