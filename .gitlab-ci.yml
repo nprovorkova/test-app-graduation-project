@@ -56,7 +56,9 @@ stages:
 #     - test-docker-image
 
 deploy-docker-image:
-  image: bitnami/kubectl:latest
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
   stage: deploy
   services:
     - docker:dind
