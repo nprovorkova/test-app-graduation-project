@@ -5,6 +5,7 @@ resources:
   - nginx-deployment.yaml
 configMapGenerator:
   - name: kustomize-config
+    namespace: applications
     literals:
       - tag=IMG_TAG
 replacements:
