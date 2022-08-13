@@ -64,7 +64,7 @@ deploy-docker-image:
   script:
     - kubectl config set-context --current --namespace=applications
     - kubectl delete configmap kustomize-config --ignore-not-found=true
-    - sed -i 's/IMG_TAG/${CI_COMMIT_TAG}/' kubernetes/kustomization.yaml
+    - sed -i 's/IMG_TAG/'${CI_COMMIT_TAG}'/' kubernetes/kustomization.yaml
     - kubectl kustomize kubernetes/
     - kubectl apply -k kubernetes/
     - kubectl get po
