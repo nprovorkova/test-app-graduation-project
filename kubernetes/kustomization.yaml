@@ -6,7 +6,7 @@ resources:
 configMapGenerator:
   - name: kustomize-config
     literals:
-      - tag=1.1.19
+      - tag=IMG_TAG
 replacements:
   - source:
       # Replace any matches by the value of environment variable `IMAGE_TAG`.
