@@ -63,7 +63,7 @@ deploy-docker-image:
     - docker:dind
   script:
     - kubectl config set-context --current --namespace=applications
-    - kubectl delete configmap kustomize-config
+    - kubectl delete configmap kustomize-config --ignore-not-found=true
     - kubectl create configmap kustomize-config --from-literal=tag=${CI_COMMIT_TAG}
     - kubectl kustomize kubernetes/
     - kubectl apply -k kubernetes/
