@@ -26,7 +26,7 @@ test-docker-image:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker run --name test_build --rm -d -p 18080:80 ${CI_REGISTRY_IMAGE}:latest
     - sleep 5s
-    - wget -q docker:18080 -O - |grep 'Test application!'
+    - wget -q docker:18080 -O - |grep 'Test application'
   after_script:
     - docker kill test_build
   needs:
