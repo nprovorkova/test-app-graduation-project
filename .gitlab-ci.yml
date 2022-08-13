@@ -67,7 +67,7 @@ deploy-docker-image:
     - kubectl create configmap kustomize-config --from-literal=tag=${CI_COMMIT_TAG}
     - kubectl kustomize kubernetes/
     - kubectl apply -k kubernetes/
-    - kubectl get po
+    - kubectl get pods
   rules:
     - if: $CI_COMMIT_TAG
   needs:
