@@ -29,8 +29,6 @@ test-docker-image:
     - wget -q docker:18080 -O - |grep 'Test application'
   after_script:
     - docker kill test_build
-  needs:
-    - build-docker-image
 
 push-docker-image:
   image: docker:git
@@ -41,7 +39,7 @@ push-docker-image:
     - echo "$YC_SECRET" | docker login -u json_key --password-stdin cr.yandex
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}:latest
-    - UPLOAD_TAGS=latest
+    - UPLOAD_TAGS=${CI_COMMIT_SHORT_SHA}
       # If we have commit tag, then assign to image additional tags - git tag name and :stable
     - if [ -n "${CI_COMMIT_TAG}" ]; then UPLOAD_TAGS="${CI_COMMIT_TAG}"; fi
     - |
@@ -50,9 +48,6 @@ push-docker-image:
         docker tag ${CI_REGISTRY_IMAGE}:latest ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
         docker push ${CONTAINER_REGISTRY}/${APP_NAME}:${TAG}
       done
-  needs:
-    - build-docker-image
-    - test-docker-image
 
 deploy-docker-image:
   image:
@@ -70,7 +65,3 @@ deploy-docker-image:
     - kubectl get po
   rules:
     - if: $CI_COMMIT_TAG
-  needs:
-    - build-docker-image
-    - test-docker-image
-    - push-docker-image
